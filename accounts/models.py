@@ -8,7 +8,14 @@ from django.contrib.auth.models import (
 
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, username, email, password=None):
+    def create_user(
+        self,
+        first_name,
+        last_name,
+        username,
+        email,
+        password=None,
+    ):
         if not email:
             raise ValueError("User must have an Email address")
 
