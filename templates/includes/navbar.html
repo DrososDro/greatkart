@@ -96,11 +96,7 @@
                             <div class="icon icon-sm rounded-circle border">
                                 <i class="fa fa-shopping-cart"></i>
                             </div>
-                            <span class="badge badge-pill badge-danger notify">
-                                {% if quantity %}
-                                    {{ quantity }}{% else %}0
-                                {% endif %}
-                            </span>
+                            <span class="badge badge-pill badge-danger notify">{{ cart_count }}</span>
                         </a>
                     </div>
                     <!-- widgets-wrap.// -->
