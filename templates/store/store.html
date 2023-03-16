@@ -3,7 +3,11 @@
     <!-- ========================= SECTION PAGETOP ========================= -->
     <section class="section-pagetop bg">
         <div class="container">
-            <h2 class="title-page">Our Store</h2>
+            {% if "search" in request.path %}
+                <h2 class="title-page">Search Result</h2>
+            {% else %}
+                <h2 class="title-page">Our Store</h2>
+            {% endif %}
         </div>
         <!-- container //  -->
     </section>
@@ -161,32 +165,38 @@
                     <!-- sect-heading -->
                     <div class="row">
                         <!-- col.// -->
-                        {% for product in products %}
-                            <!-- col.// -->
-                            <div class="col-md-4">
-                                <figure class="card card-product-grid">
-                                    <div class="img-wrap">
-                                        <img src="{{ product.images.url }}">
-                                    </div>
-                                    <!-- img-wrap.// -->
-                                    <figcaption class="info-wrap">
-                                        <div class="fix-height">
-                                            <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
-                                            <div class="price-wrap mt-2">
-                                                <span class="price">${{ product.price }}</span>
-                                            </div>
-                                            <!-- price-wrap.// -->
+                        {% if products %}
+                            {% for product in products %}
+                                <!-- col.// -->
+                                <div class="col-md-4">
+                                    <figure class="card card-product-grid">
+                                        <div class="img-wrap">
+                                            <img src="{{ product.images.url }}">
                                         </div>
-                                        {% if product.stock <= 0  %}
-                                            <h5 class='text-danger'>out of stock</h5>
-                                        {% else %}
-                                            <a href="{{ product.get_url }}" class="btn  btn-block btn-primary"> <span class="text">View Details</span> <i class="fas fa-shopping-cart"></i> </a>
-                                        {% endif %}
-                                    </figcaption>
-                                </figure>
+                                        <!-- img-wrap.// -->
+                                        <figcaption class="info-wrap">
+                                            <div class="fix-height">
+                                                <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+                                                <div class="price-wrap mt-2">
+                                                    <span class="price">${{ product.price }}</span>
+                                                </div>
+                                                <!-- price-wrap.// -->
+                                            </div>
+                                            {% if product.stock <= 0  %}
+                                                <h5 class='text-danger'>out of stock</h5>
+                                            {% else %}
+                                                <a href="{{ product.get_url }}" class="btn  btn-block btn-primary"> <span class="text">View Details</span> <i class="fas fa-shopping-cart"></i> </a>
+                                            {% endif %}
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                                <!-- col.// -->
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center">
+                                <h2 >No Result Found. Please try again.</h2>
                             </div>
-                            <!-- col.// -->
-                        {% endfor %}
+                        {% endif %}
                     </div>
                     <!-- row end.// -->
                     {% if products.has_other_pages  %}
