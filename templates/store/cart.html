@@ -24,7 +24,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for item in cart_items  %}
+                                    {% for item in cart_items %}
                                         <tr>
                                             <td>
                                                 <figure class="itemside align-items-center">
@@ -34,9 +34,12 @@
                                                     <figcaption class="info">
                                                         <a href="{{ item.product.get_url }}" class="title text-dark">{{ item.product.product_name }}</a>
                                                         <p class="text-muted small">
-                                                            Matrix: 25 Mpx
-                                                            <br>
-                                                            Brand: Canon
+                                                            {% if item.variation.all %}
+                                                                {% for var in item.variation.all %}
+                                                                    {{ var.variation_category }} : {{ var.varition_value }}
+                                                                    <br>
+                                                                {% endfor %}
+                                                            {% endif %}
                                                         </p>
                                                     </figcaption>
                                                 </figure>
@@ -46,7 +49,7 @@
                                                 <div class="col">
                                                     <div class="input-group input-spinner">
                                                         <div class="input-group-prepend">
-                                                            <a href="{% url 'remove-cart' item.product.id %}"
+                                                            <a href="{% url 'remove-cart' item.product.id item.id %}"
                                                                class="btn btn-light"
                                                                type="button"
                                                                id="button-plus">
@@ -55,12 +58,17 @@
                                                         </div>
                                                         <input type="text" class="form-control" value="{{ item.quantity }}">
                                                         <div class="input-group-append">
-                                                            <a href="{% url 'add-cart' item.product.id %}"
-                                                               class="btn btn-light"
-                                                               type="button"
-                                                               id="button-minus">
-                                                                <i class="fa fa-plus"></i>
-                                                            </a>
+                                                            <form action="{% url 'add-cart' item.product.id %}" method="POST">
+                                                                {% csrf_token %}
+                                                                {% for var in item.variation.all %}
+                                                                    <input type="hidden"
+                                                                           name="{{ var.variation_category|lower }}"
+                                                                           value="{{ var.varition_value }}">
+                                                                {% endfor %}
+                                                                <button class="btn btn-light" type="submit" id="button-minus">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                     <!-- input-group.// -->
@@ -75,7 +83,8 @@
                                                 <!-- price-wrap .// -->
                                             </td>
                                             <td class="text-right">
-                                                <a href="{% url 'remove-cart-item' item.product.id %}"
+                                                <a href="{% url 'remove-cart-item' item.product.id item.id %}"
+                                                   onclick="return confirm('Are You sure you want to delete this item?')"
                                                    class="btn btn-danger">Remove</a>
                                             </td>
                                         </tr>
@@ -90,25 +99,19 @@
                         <div class="card">
                             <div class="card-body">
                                 <dl class="dlist-align">
-                                    <dt>
-                                        Total price:
-                                    </dt>
+                                    <dt>Total price:</dt>
                                     <dd class="text-right">
                                         ${{ total }}
                                     </dd>
                                 </dl>
                                 <dl class="dlist-align">
-                                    <dt>
-                                        Tax:
-                                    </dt>
+                                    <dt>Tax:</dt>
                                     <dd class="text-right">
                                         ${{ tax|floatformat:2 }}
                                     </dd>
                                 </dl>
                                 <dl class="dlist-align">
-                                    <dt>
-                                        Total:
-                                    </dt>
+                                    <dt>Total:</dt>
                                     <dd class="text-right text-dark b">
                                         <strong>${{ grant_total|floatformat:2 }}</strong>
                                     </dd>

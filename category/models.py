@@ -23,3 +23,4 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return self.category_name
+        # return self.description
