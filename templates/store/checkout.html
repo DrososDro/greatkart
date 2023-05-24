@@ -1,129 +1,129 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<section class="section-content padding-y bg">
-  <div class="container">
-    <!-- ============================ COMPONENT 1 ================================= -->
-    <div class="row">
-      <aside class="col-lg-6">
-        <form action='' method="POST">
-          {% csrf_token %}
-          <div class="card"></div>
-          <div class="card-body">
-            <h4>Billing Address</h4>
-            <div class="form-row">
-              <div class="col form-group">
-                <label for="">First Name</label>
-                <input type="text" name="first_name" value="" class="form-control" required>
-              </div>
-              <div class="col form-group">
-                <label for="">Last Name</label>
-                <input type="text" name="last_name" value="" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="col form-group">
-                <label for="">Email Address</label>
-                <input type="email" name="email" value="" class="form-control" required>
-              </div>
-              <div class="col form-group">
-                <label for="">Phone Number</label>
-                <input type="text" name="phone" value="" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="col form-group">
-                <label for="">Address Line</label>
-                <input type="text" name="address" value="" class="form-control" required>
-              </div>
-              <div class="col form-group">
-                <label for="">Address Line 2</label>
-                <input type="text" name="address2" value="" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="col form-group">
-                <label for="">City</label>
-                <input type="text" name="city" value="" class="form-control" required>
-              </div>
-              <div class="col form-group">
-                <label for="">State</label>
-                <input type="text" name="State" value="" class="form-control" required>
-              </div>
-              <div class="col form-group">
-                <label for="">Country</label>
-                <input type="text" name="Country" value="" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <label for="">Order Note</label>
-              <textarea rows="2" name="note" value="" class="form-control">
+    <section class="section-content padding-y bg">
+        <div class="container">
+            <!-- ============================ COMPONENT 1 ================================= -->
+            <div class="row">
+                <aside class="col-lg-6">
+                    <form action='{% url 'place-order' %}' method="POST">
+                        {% csrf_token %}
+                        <div class="card"></div>
+                        <div class="card-body">
+                            <h4>Billing Address</h4>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">First Name</label>
+                                    <input type="text" name="first_name" value="" class="form-control" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="">Last Name</label>
+                                    <input type="text" name="last_name" value="" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">Email Address</label>
+                                    <input type="email" name="email" value="" class="form-control" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="">Phone Number</label>
+                                    <input type="text" name="phone" value="" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">Address Line</label>
+                                    <input type="text" name="address" value="" class="form-control" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="">Address Line 2</label>
+                                    <input type="text" name="address2" value="" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">City</label>
+                                    <input type="text" name="city" value="" class="form-control" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="">State</label>
+                                    <input type="text" name="state" value="" class="form-control" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="">Country</label>
+                                    <input type="text" name="country" value="" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="">Order Note</label>
+                                <textarea rows="2" name="order_note" value="" class="form-control">
               </textarea>
+                            </div>
+                        </div>
+                        <!-- card.// -->
+                    </aside>
+                    <!-- col.// -->
+                    <aside class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-borderless table-shopping-cart">
+                                    <thead class="text-muted">
+                                        <tr class="small text-uppercase">
+                                            <th scope="col">Product</th>
+                                            <th scope="col" width="120">Quantity</th>
+                                            <th scope="col" width="120">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in cart_items %}
+                                            <tr>
+                                                <td>
+                                                    <figure class="itemside align-items-center">
+                                                        <div class="aside">
+                                                            <img src="{{ item.product.images.url }}" class="img-sm">
+                                                        </div>
+                                                        <figcaption class="info">
+                                                            <a href="{{ item.product.get_url }}" class="title text-dark">{{ item.product.product_name }}</a>
+                                                            <p class="text-muted small">
+                                                                {% if item.variation.all %}
+                                                                    {% for var in item.variation.all %}
+                                                                        {{ var.variation_category }} : {{ var.varition_value }}
+                                                                        <br>
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            </p>
+                                                        </figcaption>
+                                                    </figure>
+                                                </td>
+                                                <td>
+                                                    <label for="">{{ item.quantity }}</label>
+                                                </td>
+                                                <td>
+                                                    <div class="price-wrap">
+                                                        <var class="price">${{ item.sub_total }}</var>
+                                                        <small class="text-muted">${{ item.product.price }} each</small>
+                                                    </div>
+                                                    <!-- price-wrap .// -->
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
+                                <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                            </div>
+                            <!-- card-body.// -->
+                        </div>
+                        <!-- card.// -->
+                    </form>
+                </aside>
+                <!-- col.// -->
             </div>
-          </div>
-          <!-- card.// -->
-      </aside>
-      <!-- col.// -->
-      <aside class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <table class="table table-borderless table-shopping-cart">
-              <thead class="text-muted">
-                <tr class="small text-uppercase">
-                  <th scope="col">Product</th>
-                  <th scope="col" width="120">Quantity</th>
-                  <th scope="col" width="120">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item in cart_items %}
-                <tr>
-                  <td>
-                    <figure class="itemside align-items-center">
-                      <div class="aside">
-                        <img src="{{ item.product.images.url }}" class="img-sm">
-                      </div>
-                      <figcaption class="info">
-                        <a href="{{ item.product.get_url }}" class="title text-dark">{{ item.product.product_name }}</a>
-                        <p class="text-muted small">
-                          {% if item.variation.all %}
-                          {% for var in item.variation.all %}
-                          {{ var.variation_category }} : {{ var.varition_value }}
-                          <br>
-                          {% endfor %}
-                          {% endif %}
-                        </p>
-                      </figcaption>
-                    </figure>
-                  </td>
-                  <td>
-                    <label for="">{{ item.quantity }}</label>
-                  </td>
-                  <td>
-                    <div class="price-wrap">
-                      <var class="price">${{ item.sub_total }}</var>
-                      <small class="text-muted">${{ item.product.price }} each</small>
-                    </div>
-                    <!-- price-wrap .// -->
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
-            <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
-          </div>
-          <!-- card-body.// -->
+            <!-- row.// -->
+            <!-- ============================ COMPONENT 1 END .// ================================= -->
         </div>
-        <!-- card.// -->
-        </form>
-      </aside>
-      <!-- col.// -->
-    </div>
-    <!-- row.// -->
-    <!-- ============================ COMPONENT 1 END .// ================================= -->
-  </div>
-  <!-- container .//  -->
-</section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
+        <!-- container .//  -->
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
 {% endblock content %}
